@@ -27,6 +27,20 @@ enum charybdis_keymap_layers {
     LAYER_POINTER,
 };
 
+enum combos {
+    Q_WG,
+    Z_XW,
+    AE_AE,
+    OE_OE,
+    AO_AU,
+    TH_TN,
+    CH_CT,
+    SH_ST,
+    WH_WM,
+    PH_PD,
+    GH_GM
+};
+
 /** \brief Automatically enable sniping-mode on the pointer layer. */
 #define CHARYBDIS_AUTO_SNIPING_ON_LAYER LAYER_POINTER
 
@@ -46,18 +60,18 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define RAISE MO(LAYER_RAISE)
 #define PT_Z LT(LAYER_POINTER, KC_Z)
 #define PT_SLSH LT(LAYER_POINTER, KC_SLSH)
-#define HIND_R MT(KC_RSFT, KC_A)
-#define HIND_L MT(KC_LSFT, KC_T)
-#define HMID_R MT(KC_RCTL, KC_E)
-#define HMID_L MT(KC_LCTL, KC_N)
-#define HING_R MT(KC_RGUI, KC_I)
-#define HING_L MT(KC_LGUI, KC_C)
-#define HINK_R MT(KC_RALT, KC_H)
-#define HINK_L MT(KC_RALT, KC_S)
+#define HIND_R MT(MOD_RSFT, KC_A)
+#define HIND_L MT(MOD_LSFT, KC_T)
+#define HMID_R MT(MOD_RCTL, KC_E)
+#define HMID_L MT(MOD_LCTL, KC_N)
+#define HING_R MT(MOD_RGUI, KC_I)
+#define HING_L MT(MOD_LGUI, KC_C)
+#define HINK_R MT(MOD_RALT, KC_H)
+#define HINK_L MT(MOD_RALT, KC_S)
 #define BMID_R LT(LAYER_POINTER, KC_O)
 #define BMID_L LT(LAYER_POINTER, KC_L)
-#define SHIFTDEL MT(KC_RSFT, KC_DEL)
-#define SHIFTBACK MT(KC_LSFT, KC_BSPC)
+#define SHIFTDEL MT(MOD_RSFT, KC_DEL)
+#define SHIFTBACK MT(MOD_LSFT, KC_BSPC)
 
 
 #ifndef POINTING_DEVICE_ENABLE
@@ -133,6 +147,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
+const uint16_t PROGMEM th_combo[] = {HIND_L, HMID_L, COMBO_END};
+const uint16_t PROGMEM ch_combo[] = {HIND_L, HING_L, COMBO_END};
+const uint16_t PROGMEM sh_combo[] = {HIND_L, HINK_L, COMBO_END};
+const uint16_t PROGMEM wh_combo[] = {KC_W, KC_M, COMBO_END};
+const uint16_t PROGMEM gh_combo[] = {KC_G, KC_M, COMBO_END};
+const uint16_t PROGMEM ph_combo[] = {HIND_L, KC_D, COMBO_END};
+const uint16_t PROGMEM ae_combo[] = {HIND_R, HMID_R, COMBO_END};
+const uint16_t PROGMEM ao_combo[] = {HIND_R, KC_U, COMBO_END};
+const uint16_t PROGMEM oe_combo[] = {BMID_R, HMID_R, COMBO_END};
+const uint16_t PROGMEM z_combo[] = {KC_X, KC_W, COMBO_END};
+const uint16_t PROGMEM q_combo[] = {KC_G, KC_W, COMBO_END};
+
+
 #ifdef POINTING_DEVICE_ENABLE
 #    ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
@@ -172,3 +199,107 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
 void rgb_matrix_update_pwm_buffers(void);
 #endif
+
+combo_t key_combos[] = {
+  [Q_WG] = COMBO(q_combo, KC_Q),
+  [Z_XW] = COMBO(z_combo, KC_Z),
+  [AE_AE] = COMBO(ae_combo, KC_A),
+  [OE_OE] = COMBO(oe_combo, KC_E),
+  [AO_AU] = COMBO(z_combo, KC_Z),
+  [TH_TN] = COMBO_ACTION(th_combo),
+  [CH_CT] = COMBO_ACTION(ch_combo),
+  [SH_ST] = COMBO_ACTION(sh_combo),
+  [WH_WM] = COMBO_ACTION(wh_combo),
+  [PH_PD] = COMBO_ACTION(ph_combo),
+  [GH_GM] = COMBO_ACTION(gh_combo),
+    unregister_mods(MOD_MASK_SHIFT);  //
+    tap_code(KC_H); // send "h" honoring CAPSLK state
+    break;
+};
+
+uint16_t COMBO_LEN = COMBO_LENGTH;
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+    switch(combo_index) {
+        case HC_Th: // on first press
+                tap_code(KC_T); // send "T" honoring caps
+                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
+                break;
+        case HC_Sh:
+                tap_code(KC_S); // send "T" honoring caps
+                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
+                break;
+        case HC_Wh:
+                tap_code(KC_W); // send "W" honoring caps
+                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
+                break;
+        case HC_Ch: // not held
+                tap_code(KC_C); // send "C" honoring caps
+                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
+                break;
+            case HC_Gh: // not held
+                tap_code(KC_G); // send "G" honoring caps
+                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
+                break;
+            case HC_Ph:
+                tap_code(KC_P); // send "P" honoring caps
+                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
+                break;
+}
+                 if (combo_on) linger_timer = timer_read();
+} else {
+    if (combo_on && !combo_triggered) {
+        switch (combo_index) {
+            case TH_TN:
+            case CH_CT:
+            case WH_WM:
+            case PH_PD:
+            case GH_GM:
+            case SH_ST:
+                    unregister_mods(MOD_MASK_SHIFT);  //
+                    tap_code(KC_H); // send "h" honoring CAPSLK state
+                    break;     
+        }
+    } else {
+switch(combo_index) {
+}
+    }
+                combo_on = combo_triggered = false;
+}
+return;
+}
+    
+
+
+
+void matrix_scan_user_process_combo() {
+        if (!combo_triggered) {
+
+            if ((timer_elapsed(linger_timer) > COMBO_HOLD) && combo_on) {
+            saved_mods = get_mods();
+            clear_mods();
+                switch(combo_on) { 
+                case SH_ST: // if these H digragh combos are held, then send T/SION instead
+                case TH_TN: // TION = by far most common 4-gram, (then THAT/THER/WITH/MENT)
+                    unregister_mods(MOD_MASK_SHIFT);
+                    send_string("ion");
+                    break;
+                case GH_GM: // held, send "ght"
+                    unregister_mods(MOD_MASK_SHIFT);  //
+                    tap_code(KC_H); // send "h"
+                    tap_code(KC_T); // add "t" ("ght" is 55% of all "gh" occurrences)
+                    break;
+                case CH_CT: //
+                case WH_WM: //
+                case PH_PD: //
+                    unregister_mods(MOD_MASK_SHIFT);  //
+                    tap_code(KC_H); // send "h"
+                    tap_code(KC_I); // add "i"
+                    break;
+                }
+                set_mods(saved_mods);
+                combo_triggered = true;
+            }
+        }
+
+}
