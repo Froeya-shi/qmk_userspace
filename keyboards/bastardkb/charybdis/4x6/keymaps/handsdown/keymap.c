@@ -46,7 +46,18 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define RAISE MO(LAYER_RAISE)
 #define PT_Z LT(LAYER_POINTER, KC_Z)
 #define PT_SLSH LT(LAYER_POINTER, KC_SLSH)
-#define PT_A LT(KC_RSFT, KC_A)
+#define HIND_R LT(KC_RSFT, KC_A)
+#define HIND_L LT(KC_LSFT, KC_T)
+#define HMID_R LT(KC_RCTL, KC_E)
+#define HMID_L LT(KC_LCTL, KC_N)
+#define HING_R LT(KC_RGUI, KC_I)
+#define HING_L LT(KC_LGUI, KC_C)
+#define HINK_R LT(KC_RALT, KC_H)
+#define HINK_L LT(KC_RALT, KC_S)
+#define BMID_R LT(LAYER_POINTER, KC_O)
+#define BMID_L LT(LAYER_POINTER, KC_L)
+#define SHIFTDEL LT(KC_RSFT, KC_DEL)
+#define SHIFTBACK LT(KC_LSFT, KC_BSPC)
 
 
 #ifndef POINTING_DEVICE_ENABLE
@@ -61,18 +72,18 @@ static uint16_t auto_pointer_layer_timer = 0;
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
-  // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
+  // ╭──────────────────────────────────────────────────────╮      ╭──────────────────────────────────────────────────────╮
         KC_LGUI,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,       KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_MINS,
-  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+  // ├──────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
         KC_TAB,    KC_X,    KC_W,    KC_M,    KC_G,    KC_QUOT,       KC_SCLN,    KC_DOT,    KC_QUOT,    KC_J,    KC_B, KC_BSLS,
-  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_Q,    KC_S,    KC_C,    KC_N,    KC_T,    KC_K,       KC_COMM,    PT_A,    KC_E,    KC_I, KC_H, KC_Z,
-  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_LCTL,    KC_V,    KC_P,    KC_L,    KC_D,    KC_SLSH,       KC_N,    KC_U, KC_O,  KC_Y, KC_F, KC_LALT,
-  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                   KC_ESC, KC_R,   LOWER,      RAISE,  KC_SPC,
-                                           KC_ENT, KC_BSPC,     KC_RSFT
-        //                            ╰───────────────────────────╯ ╰──────────────────╯
+  // ├──────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
+       KC_Q,    HINK_L,    HING_L,    HMID_L,    HIND_L,    KC_K,       KC_COMM,    HIND_R,    HMID_R,    HING_R, HINK_R, KC_Z,
+  // ├──────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
+       KC_LCTL,    KC_V,    KC_P,    BMID_L,    KC_D,    KC_SLSH,       KC_N,    KC_U, BMID_R,  KC_Y, KC_F, KC_LALT,
+  // ╰──────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────╯
+                                       KC_ESC, KC_R,   LOWER,      RAISE,  KC_SPC,
+                                           KC_ENT, SHIFTBACK,     SHIFTDEL
+        //                        ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
   [LAYER_LOWER] = LAYOUT(
@@ -161,9 +172,3 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
 void rgb_matrix_update_pwm_buffers(void);
 #endif
-
-void pointing_device_init_user(void) {
-
-    set_auto_mouse_layer(LAYER_POINTER); // only required if AUTO_MOUSE_DEFAULT_LAYER is not set to index of <mouse_layer>
-    set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
-}
