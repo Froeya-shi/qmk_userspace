@@ -221,27 +221,27 @@ uint16_t COMBO_LEN = COMBO_LENGTH;
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
     switch(combo_index) {
-        case HC_Th: // on first press
+        case TH_TN: // on first press
                 tap_code(KC_T); // send "T" honoring caps
                 combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
                 break;
-        case HC_Sh:
+        case SH_ST:
                 tap_code(KC_S); // send "T" honoring caps
                 combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
                 break;
-        case HC_Wh:
+        case WH_WM:
                 tap_code(KC_W); // send "W" honoring caps
                 combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
                 break;
-        case HC_Ch: // not held
+        case CH_CT: // not held
                 tap_code(KC_C); // send "C" honoring caps
                 combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
                 break;
-            case HC_Gh: // not held
+            case GH_GM: // not held
                 tap_code(KC_G); // send "G" honoring caps
                 combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
                 break;
-            case HC_Ph:
+            case PH_PD:
                 tap_code(KC_P); // send "P" honoring caps
                 combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
                 break;
