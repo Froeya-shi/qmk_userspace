@@ -38,7 +38,8 @@ enum combos {
     SH_ST,
     WH_WM,
     PH_PD,
-    GH_GM
+    GH_GM,
+    COMBO_COUNT
 };
 
 /** \brief Automatically enable sniping-mode on the pointer layer. */
@@ -159,6 +160,114 @@ const uint16_t PROGMEM oe_combo[] = {BMID_R, HMID_R, COMBO_END};
 const uint16_t PROGMEM z_combo[] = {KC_X, KC_W, COMBO_END};
 const uint16_t PROGMEM q_combo[] = {KC_G, KC_W, COMBO_END};
 
+static uint16_t combo_on = 0;
+static bool combo_triggered = false;
+static uint16_t linger_timer = 0;
+static uint16_t saved_mods = 0;
+
+#ifndef COMBO_HOLD
+#define COMBO_HOLD 200 // 200ms hold time
+#endif
+
+combo_t key_combos[] = {
+  [Q_WG] = COMBO(q_combo, KC_Q),
+  [Z_XW] = COMBO(z_combo, KC_Z),
+  [AE_AE] = COMBO(ae_combo, KC_A),
+  [OE_OE] = COMBO(oe_combo, KC_E),
+  [AO_AU] = COMBO(ao_combo, KC_A), // Fixed: was using z_combo incorrectly
+  [TH_TN] = COMBO_ACTION(th_combo),
+  [CH_CT] = COMBO_ACTION(ch_combo),
+  [SH_ST] = COMBO_ACTION(sh_combo),
+  [WH_WM] = COMBO_ACTION(wh_combo),
+  [PH_PD] = COMBO_ACTION(ph_combo),
+  [GH_GM] = COMBO_ACTION(gh_combo),
+};
+
+uint16_t COMBO_LEN = COMBO_COUNT; // Fixed: was COMBO_LENGTH which doesn't exist
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+    if (pressed) {
+        switch(combo_index) {
+            case TH_TN:
+                tap_code(KC_T);
+                combo_on = combo_index;
+                break;
+            case SH_ST:
+                tap_code(KC_S);
+                combo_on = combo_index;
+                break;
+            case WH_WM:
+                tap_code(KC_W);
+                combo_on = combo_index;
+                break;
+            case CH_CT:
+                tap_code(KC_C);
+                combo_on = combo_index;
+                break;
+            case GH_GM:
+                tap_code(KC_G);
+                combo_on = combo_index;
+                break;
+            case PH_PD:
+                tap_code(KC_P);
+                combo_on = combo_index;
+                break;
+            default:
+                combo_on = 0;
+                break;
+        }
+        if (combo_on) linger_timer = timer_read();
+    } else {
+        if (combo_on && !combo_triggered) {
+            switch (combo_index) {
+                case TH_TN:
+                case CH_CT:
+                case WH_WM:
+                case PH_PD:
+                case GH_GM:
+                case SH_ST:
+                    unregister_mods(MOD_MASK_SHIFT);
+                    tap_code(KC_H);
+                    break;
+            }
+        }
+        combo_on = 0;
+        combo_triggered = false;
+    }
+}
+
+
+
+void matrix_scan_user_process_combo(void) { // Fixed: added void parameter
+    if (!combo_triggered) {
+        if ((timer_elapsed(linger_timer) > COMBO_HOLD) && combo_on) {
+            saved_mods = get_mods();
+            clear_mods();
+            switch(combo_on) {
+                case SH_ST:
+                case TH_TN:
+                    unregister_mods(MOD_MASK_SHIFT);
+                    send_string("ion");
+                    break;
+                case GH_GM:
+                    unregister_mods(MOD_MASK_SHIFT);
+                    tap_code(KC_H);
+                    tap_code(KC_T);
+                    break;
+                case CH_CT:
+                case WH_WM:
+                case PH_PD:
+                    unregister_mods(MOD_MASK_SHIFT);
+                    tap_code(KC_H);
+                    tap_code(KC_I);
+                    break;
+            }
+            set_mods(saved_mods);
+            combo_triggered = true;
+        }
+    }
+}
+
 
 #ifdef POINTING_DEVICE_ENABLE
 #    ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
@@ -199,107 +308,3 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
 void rgb_matrix_update_pwm_buffers(void);
 #endif
-
-combo_t key_combos[] = {
-  [Q_WG] = COMBO(q_combo, KC_Q),
-  [Z_XW] = COMBO(z_combo, KC_Z),
-  [AE_AE] = COMBO(ae_combo, KC_A),
-  [OE_OE] = COMBO(oe_combo, KC_E),
-  [AO_AU] = COMBO(z_combo, KC_Z),
-  [TH_TN] = COMBO_ACTION(th_combo),
-  [CH_CT] = COMBO_ACTION(ch_combo),
-  [SH_ST] = COMBO_ACTION(sh_combo),
-  [WH_WM] = COMBO_ACTION(wh_combo),
-  [PH_PD] = COMBO_ACTION(ph_combo),
-  [GH_GM] = COMBO_ACTION(gh_combo),
-    unregister_mods(MOD_MASK_SHIFT);  //
-    tap_code(KC_H); // send "h" honoring CAPSLK state
-    break;
-};
-
-uint16_t COMBO_LEN = COMBO_LENGTH;
-
-void process_combo_event(uint16_t combo_index, bool pressed) {
-    switch(combo_index) {
-        case TH_TN: // on first press
-                tap_code(KC_T); // send "T" honoring caps
-                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
-                break;
-        case SH_ST:
-                tap_code(KC_S); // send "T" honoring caps
-                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
-                break;
-        case WH_WM:
-                tap_code(KC_W); // send "W" honoring caps
-                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
-                break;
-        case CH_CT: // not held
-                tap_code(KC_C); // send "C" honoring caps
-                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
-                break;
-            case GH_GM: // not held
-                tap_code(KC_G); // send "G" honoring caps
-                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
-                break;
-            case PH_PD:
-                tap_code(KC_P); // send "P" honoring caps
-                combo_on = combo_index; // if held, check in matrix_scan_user_process_combo
-                break;
-}
-                 if (combo_on) linger_timer = timer_read();
-} else {
-    if (combo_on && !combo_triggered) {
-        switch (combo_index) {
-            case TH_TN:
-            case CH_CT:
-            case WH_WM:
-            case PH_PD:
-            case GH_GM:
-            case SH_ST:
-                    unregister_mods(MOD_MASK_SHIFT);  //
-                    tap_code(KC_H); // send "h" honoring CAPSLK state
-                    break;     
-        }
-    } else {
-switch(combo_index) {
-}
-    }
-                combo_on = combo_triggered = false;
-}
-return;
-}
-    
-
-
-
-void matrix_scan_user_process_combo() {
-        if (!combo_triggered) {
-
-            if ((timer_elapsed(linger_timer) > COMBO_HOLD) && combo_on) {
-            saved_mods = get_mods();
-            clear_mods();
-                switch(combo_on) { 
-                case SH_ST: // if these H digragh combos are held, then send T/SION instead
-                case TH_TN: // TION = by far most common 4-gram, (then THAT/THER/WITH/MENT)
-                    unregister_mods(MOD_MASK_SHIFT);
-                    send_string("ion");
-                    break;
-                case GH_GM: // held, send "ght"
-                    unregister_mods(MOD_MASK_SHIFT);  //
-                    tap_code(KC_H); // send "h"
-                    tap_code(KC_T); // add "t" ("ght" is 55% of all "gh" occurrences)
-                    break;
-                case CH_CT: //
-                case WH_WM: //
-                case PH_PD: //
-                    unregister_mods(MOD_MASK_SHIFT);  //
-                    tap_code(KC_H); // send "h"
-                    tap_code(KC_I); // add "i"
-                    break;
-                }
-                set_mods(saved_mods);
-                combo_triggered = true;
-            }
-        }
-
-}
