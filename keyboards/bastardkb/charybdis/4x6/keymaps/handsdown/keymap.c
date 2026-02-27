@@ -87,18 +87,18 @@ static uint16_t auto_pointer_layer_timer = 0;
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
-  // ╭──────────────────────────────────────────────────────╮      ╭──────────────────────────────────────────────────────╮
-        KC_LGUI,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,       KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_MINS,
-  // ├──────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
-        KC_TAB,    KC_X,    KC_W,    KC_M,    KC_G,    KC_QUOT,       KC_SCLN,    KC_DOT,    KC_QUOT,    KC_J,    KC_B, KC_BSLS,
-  // ├──────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
-       KC_Q,    HINK_L,    HING_L,    HMID_L,    HIND_L,    KC_K,       KC_COMM,    HIND_R,    HMID_R,    HING_R, HINK_R, KC_Z,
-  // ├──────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
-       KC_LCTL,    KC_V,    KC_P,    BMID_L,    KC_D,    KC_SLSH,       KC_N,    KC_U, BMID_R,  KC_Y, KC_F, KC_LALT,
-  // ╰──────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────╯
-                                       KC_ESC, KC_R,   LOWER,      RAISE,  KC_SPC,
-                                           KC_ENT, SHIFTBACK,     SHIFTDEL
-        //                        ╰───────────────────────────╯ ╰──────────────────╯
+  // ╭───────────────────────────────────────────────────────────────╮      ╭──────────────────────────────────────────────────────╮
+        KC_LGUI,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_MINS,
+  // ├───────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
+        KC_TAB,    KC_X,    KC_W,    KC_M,    KC_G,    KC_QUOT,             KC_SCLN,    KC_DOT,    KC_QUOT,    KC_J,    KC_B, KC_BSLS,
+  //  ├──────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
+       KC_LCTR,    HINK_L,    HING_L,    HMID_L,    HIND_L,    KC_K,        KC_COMM,    HIND_R,    HMID_R,    HING_R, HINK_R, KC_LALT,
+  // ├───────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
+       KC_Q,    KC_V,    KC_P,    BMID_L,    KC_D,    KC_SLSH,               KC_MINS,     KC_U,    BMID_R,     KC_Y,      KC_F,    KC_Z,
+  // ╰───────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────╯
+                                                KC_ESC, KC_R,   LOWER,      RAISE,  KC_SPC,
+                                                    KC_ENT, SHIFTBACK,     SHIFTDEL
+        //                                  ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
   [LAYER_LOWER] = LAYOUT(
@@ -139,7 +139,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, KC_LALT, KC_LGUI, KC_LCTL, KC_LSFT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RCTL, KC_RGUI, KC_RALT, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, _______, DRGSCRL, SNIPING, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, SNIPING, DRGSCRL, _______, XXXXXXX,
+       XXXXXXX, SNIPING, DRGSCRL, _______, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, _______, DRGSCRL, SNIPING, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                   KC_BTN2, KC_BTN1, KC_BTN3,    KC_BTN3, KC_BTN1,
                                            XXXXXXX, KC_BTN2,    KC_BTN2
