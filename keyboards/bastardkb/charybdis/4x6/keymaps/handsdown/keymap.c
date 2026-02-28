@@ -25,6 +25,7 @@ enum charybdis_keymap_layers {
     LAYER_LOWER,
     LAYER_RAISE,
     LAYER_POINTER,
+    LAYER_GAME,
 };
 
 enum combos {
@@ -59,6 +60,7 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 #define LOWER MO(LAYER_LOWER)
 #define RAISE MO(LAYER_RAISE)
+#define GAME TG(LAYER_GAME)
 #define PT_Z LT(LAYER_POINTER, KC_Z)
 #define PT_SLSH LT(LAYER_POINTER, KC_SLSH)
 #define HIND_R MT(MOD_RSFT, KC_A)
@@ -120,7 +122,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
         KC_F12,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,      KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_MNXT, XXXXXXX, XXXXXXX, KC_UP, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,
+       KC_MNXT, XXXXXXX, XXXXXXX, KC_UP, XXXXXXX, GAME,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_MPLY, KC_LEFT,   KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RCTL, KC_RGUI, KC_RALT, KC_MUTE,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
@@ -145,6 +147,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                            XXXXXXX, KC_BTN2,    KC_BTN2
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
+    [LAYER_GAME] = LAYOUT(
+// ╭───────────────────────────────────────────────────────────────╮      ╭──────────────────────────────────────────────────────╮
+      KC_LGUI,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_MINS,
+// ├───────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
+      KC_TAB,    KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,             GAME,    KC_DOT,    KC_QUOT,    KC_J,    KC_B, KC_BSLS,
+//  ├──────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
+     KC_LCTL,    KC_LSFT,    KC_A,    KC_S,    KC_D,    KC_F,            KC_COMM,    HIND_R,    HMID_R,    HING_R, HINK_R, KC_LALT,
+// ├───────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
+     KC_Q,    KC_LCTL,    KC_Z,    KC_X,    KC_C,    KC_V,               KC_MINS,     KC_BTN1,    KC_BTN2,     KC_BTN3,      KC_F,    KC_Z,
+// ╰───────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────╯
+                                              KC_ESC, KC_SPC,   LOWER,      RAISE,  KC_SPC,
+                                                  KC_ENT, SHIFTBACK,     SHIFTDEL
+      //                                  ╰───────────────────────────╯ ╰──────────────────╯
+),
 };
 // clang-format on
 
