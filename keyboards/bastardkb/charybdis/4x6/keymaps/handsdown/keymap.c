@@ -153,11 +153,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // ╭───────────────────────────────────────────────────────────────╮      ╭──────────────────────────────────────────────────────╮
       KC_LGUI,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_MINS,
 // ├───────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
-      KC_TAB,    KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,             GAME,    KC_DOT,    KC_QUOT,    KC_J,    KC_B, KC_BSLS,
+      KC_T,    KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,             KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, GAME,
 //  ├──────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
-     KC_LCTL,    KC_LSFT,    KC_A,    KC_S,    KC_D,    KC_F,            KC_COMM,    HIND_R,    HMID_R,    HING_R, HINK_R, KC_LALT,
+     KC_G,    KC_LSFT,    KC_A,    KC_S,    KC_D,    KC_F,            KC_H,    KC_J,    KC_K,    KC_L, KC_N, KC_LALT,
 // ├───────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────┤
-     KC_Q,    KC_LCTL,    KC_Z,    KC_X,    KC_C,    KC_V,               KC_MINS,     KC_BTN1,    KC_BTN2,     KC_BTN3,      KC_F,    KC_Z,
+     KC_B,    KC_LCTL,    KC_Z,    KC_X,    KC_C,    KC_V,               KC_M,     KC_BTN1,    KC_BTN2,     KC_BTN3,      KC_F,    KC_Z,
 // ╰───────────────────────────────────────────────────────────────┤      ├──────────────────────────────────────────────────────╯
                                               KC_ESC, KC_SPC,   LOWER,      RAISE,  KC_SPC,
                                                   KC_ENT, SHIFTBACK,     SHIFTDEL
